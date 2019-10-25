@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-class MailStatus {
+public class MailStatus {
     private final StringProperty email;
     private final BooleanProperty sent;
 
