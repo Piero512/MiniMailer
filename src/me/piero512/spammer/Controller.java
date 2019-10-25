@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -23,13 +24,14 @@ public class Controller {
     public TableColumn<MailStatus, String> mailColumn;
     public TableColumn<MailStatus, Boolean> sentColumn;
     public TableView<MailStatus> mailView;
+    public HTMLEditor correoHTML;
+    public ToggleButton toggleHtml;
     @FXML
     Button btnEnviar;
     @FXML
     TextArea correo;
     private ObservableList<MailStatus> data;
     private Stage stage;
-
     public Controller() {
         chooser.setTitle("Selecciona archivo de texto con correos en cada línea");
         chooser.setInitialDirectory(
@@ -71,16 +73,18 @@ public class Controller {
                 !smtpPassword.getText().isEmpty() &&
                 data != null;
     }
+
     public void sendMassive() {
         if (isEverythingOkay()) {
             MailerBuilder builder = new MailerBuilder();
             Mailer m = builder.setEmailFrom(from.getText())
                     .setEmailSubject(subject.getText())
-                    .setEmailText(correo.getText())
+                    .setEmailText(toggleHtml.selectedProperty().get() ? correoHTML.getHtmlText() : correo.getText())
                     .setSmtpServer(smtpServer.getText())
                     .setUsername(userName.getText())
                     .setPassword(smtpPassword.getText())
                     .setEmails(data)
+                    .setMimeType(toggleHtml.selectedProperty().get() ? "text/plain" : "text/html")
                     .createMailer();
             Runnable r = m::sendMail;
             Thread t = new Thread(r);

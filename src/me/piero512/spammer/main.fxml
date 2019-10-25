@@ -1,6 +1,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.web.HTMLEditor?>
 <BorderPane fx:controller="me.piero512.spammer.Controller"
             xmlns:fx="http://javafx.com/fxml">
     <center>
@@ -60,10 +61,14 @@
                                 <Insets right="10"/>
                             </padding>
                             <Label text="Escribe tu mensaje aqui!"/>
-                            <TextArea fx:id="correo"/>
+                            <ToggleButton text="Alternar Texto plano/HTML" fx:id="toggleHtml">
+                            </ToggleButton>
+                            <TextArea fx:id="correo" visible="${!toggleHtml.selected}"
+                                      managed="${!toggleHtml.selected}"/>
+                            <HTMLEditor fx:id="correoHTML" visible="${toggleHtml.selected}"
+                                        managed="${toggleHtml.selected}"/>
                             <Button text="Enviar correos masivos!" onAction="#sendMassive" fx:id="btnEnviar"/>
                         </VBox>
-
                     </center>
                 </BorderPane>
             </right>

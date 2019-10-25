@@ -10,21 +10,23 @@ import java.util.Date;
 import java.util.Properties;
 
 class Mailer {
-    private final ObservableList<MailStatus> emails;
-    private final String username;
-    private final String password;
-    private final String emailFrom;
-    private final String emailSubject;
-    private final String emailText;
-    private final Properties prop;
+    final ObservableList<MailStatus> emails;
+    final String username;
+    final String password;
+    final String emailFrom;
+    final String emailSubject;
+    final String emailText;
+    final String mimeType;
+    final Properties prop;
 
-    Mailer(ObservableList<MailStatus> emails, String smtpServer, String username, String password, String emailFrom, String emailSubject, String emailText) {
+    Mailer(ObservableList<MailStatus> emails, String smtpServer, String username, String password, String emailFrom, String emailSubject, String emailText, String mimeType) {
         this.emails = emails;
         this.username = username;
         this.password = password;
         this.emailFrom = emailFrom;
         this.emailSubject = emailSubject;
         this.emailText = emailText;
+        this.mimeType = mimeType;
         prop = new Properties();
         prop.put("mail.smtp.host", smtpServer); //optional, defined in SMTPTransport
         prop.put("mail.smtp.auth", "true");
@@ -53,7 +55,7 @@ class Mailer {
                 // subject
                 msg.setSubject(emailSubject);
                 // content
-                msg.setText(emailText);
+                msg.setContent(emailText, mimeType);
                 msg.setSentDate(new Date());
                 Transport.send(msg);
                 System.out.println("Mensaje enviado correctamente a " + status.getEmail());
