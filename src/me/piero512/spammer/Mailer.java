@@ -43,29 +43,38 @@ class Mailer {
                 return new PasswordAuthentication(username, password);
             }
         });
-
-        for (MailStatus status : emails) {
-            try {
-                // from
-                Message msg = new MimeMessage(session);
-                msg.setFrom(new InternetAddress(emailFrom));
-                // to
-                msg.setRecipients(Message.RecipientType.TO,
-                        InternetAddress.parse(status.getEmail()));
-                // subject
-                msg.setSubject(emailSubject);
-                // content
-                msg.setContent(emailText, mimeType);
-                msg.setSentDate(new Date());
-                Transport.send(msg);
-                System.out.println("Mensaje enviado correctamente a " + status.getEmail());
-                status.setSent(true);
-            } catch (AddressException e) {
-                System.out.printf("Saltando correo: %s", status);
-            } catch (MessagingException e) {
-                System.out.println("Error al enviar?");
-                e.printStackTrace();
-            }
+        Transport t = null;
+        try {
+            t = session.getTransport("smtp");
+            t.connect();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        if (t != null) {
+            Transport finalT = t;
+            emails.parallelStream().forEach((mailStatus -> {
+                try {
+                    // from
+                    Message msg = new MimeMessage(session);
+                    msg.setFrom(new InternetAddress(emailFrom));
+                    // to
+                    msg.setRecipients(Message.RecipientType.TO,
+                            InternetAddress.parse(mailStatus.getEmail()));
+                    // subject
+                    msg.setSubject(emailSubject);
+                    // content
+                    msg.setContent(emailText, mimeType);
+                    msg.setSentDate(new Date());
+                    finalT.sendMessage(msg, msg.getAllRecipients());
+                    System.out.println("Mensaje enviado correctamente a " + mailStatus.getEmail());
+                    mailStatus.setSent(true);
+                } catch (AddressException e) {
+                    System.out.printf("Saltando correo: %s", mailStatus.getEmail());
+                } catch (MessagingException e) {
+                    System.out.println("Error al enviar?");
+                    e.printStackTrace();
+                }
+            }));
         }
 
     }
