@@ -1,0 +1,72 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<BorderPane fx:controller="me.piero512.spammer.Controller"
+            xmlns:fx="http://javafx.com/fxml">
+    <center>
+        <BorderPane>
+            <padding>
+                <Insets left="10" top="10" bottom="10"/>
+            </padding>
+            <left>
+                <VBox spacing="20">
+                    <VBox spacing="20">
+                        <Label text="Datos de conexión" />
+                        <HBox spacing="20">
+                            <Label text="Servidor SMTP" />
+                            <TextField fx:id="smtpServer" promptText="Ingresa servidor SMTP!" />
+                        </HBox>
+                        <HBox spacing="20">
+                            <Label text="Usuario (correo)" />
+                            <TextField fx:id="userName" promptText="Ingresa tu usuario aqui!" />
+                        </HBox>
+                        <HBox spacing="20">
+                            <Label text="Contraseña" />
+                            <PasswordField fx:id="smtpPassword" promptText="Ingresa la contraseña!" />
+                        </HBox>
+                    </VBox>
+                    <HBox spacing="20">
+                        <Label text="Lista de correos"/>
+                        <Button text="Examinar" onAction="#openPicker"/>
+                    </HBox>
+                    <TableView fx:id="mailView" prefWidth="300">
+                        <columnResizePolicy>
+                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        </columnResizePolicy>
+                        <placeholder>
+                            <Label text="No has cargado el archivo!"/>
+                        </placeholder>
+                        <columns>
+                            <TableColumn fx:id="mailColumn" text="Correos"/>
+                            <TableColumn fx:id="sentColumn"  text="Enviado?"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+
+            </left>
+            <right>
+                <BorderPane>
+                    <top>
+                        <HBox spacing="20">
+                            <Label text="De:"/>
+                            <TextField fx:id="from" promptText="Ingresa el correo de origen"/>
+                            <Label text="Asunto:"/>
+                            <TextField fx:id="subject" promptText="Ingresa el asunto!"/>
+                        </HBox>
+                    </top>
+                    <center>
+                        <VBox>
+                            <padding>
+                                <Insets right="10"/>
+                            </padding>
+                            <Label text="Escribe tu mensaje aqui!"/>
+                            <TextArea fx:id="correo"/>
+                            <Button text="Enviar correos masivos!" onAction="#sendMassive" fx:id="btnEnviar"/>
+                        </VBox>
+
+                    </center>
+                </BorderPane>
+            </right>
+        </BorderPane>
+    </center>
+</BorderPane>
