@@ -25,7 +25,7 @@ public class Controller {
     public TableColumn<MailStatus, Boolean> sentColumn;
     public TableView<MailStatus> mailView;
     public HTMLEditor correoHTML;
-    public ToggleButton toggleHtml;
+    public ComboBox<String> mimeType;
     @FXML
     Button btnEnviar;
     @FXML
@@ -79,12 +79,12 @@ public class Controller {
             MailerBuilder builder = new MailerBuilder();
             Mailer m = builder.setEmailFrom(from.getText())
                     .setEmailSubject(subject.getText())
-                    .setEmailText(toggleHtml.selectedProperty().get() ? correoHTML.getHtmlText() : correo.getText())
+                    .setEmailText(correo.getText())
                     .setSmtpServer(smtpServer.getText())
                     .setUsername(userName.getText())
                     .setPassword(smtpPassword.getText())
                     .setEmails(data)
-                    .setMimeType(toggleHtml.selectedProperty().get() ? "text/plain" : "text/html")
+                    .setMimeType(mimeType.getSelectionModel().getSelectedItem())
                     .createMailer();
             Runnable r = m::sendMail;
             Thread t = new Thread(r);

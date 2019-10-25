@@ -1,7 +1,8 @@
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.web.HTMLEditor?>
+<?import java.lang.String?>
 <BorderPane fx:controller="me.piero512.spammer.Controller"
             xmlns:fx="http://javafx.com/fxml">
     <center>
@@ -12,18 +13,18 @@
             <left>
                 <VBox spacing="20">
                     <VBox spacing="20">
-                        <Label text="Datos de conexión" />
+                        <Label text="Datos de conexión"/>
                         <HBox spacing="20">
-                            <Label text="Servidor SMTP" />
-                            <TextField fx:id="smtpServer" promptText="Ingresa servidor SMTP!" />
+                            <Label text="Servidor SMTP"/>
+                            <TextField fx:id="smtpServer" promptText="Ingresa servidor SMTP!"/>
                         </HBox>
                         <HBox spacing="20">
-                            <Label text="Usuario (correo)" />
-                            <TextField fx:id="userName" promptText="Ingresa tu usuario aqui!" />
+                            <Label text="Usuario (correo)"/>
+                            <TextField fx:id="userName" promptText="Ingresa tu usuario aqui!"/>
                         </HBox>
                         <HBox spacing="20">
-                            <Label text="Contraseña" />
-                            <PasswordField fx:id="smtpPassword" promptText="Ingresa la contraseña!" />
+                            <Label text="Contraseña"/>
+                            <PasswordField fx:id="smtpPassword" promptText="Ingresa la contraseña!"/>
                         </HBox>
                     </VBox>
                     <HBox spacing="20">
@@ -47,26 +48,30 @@
             </left>
             <right>
                 <BorderPane>
-                    <top>
-                        <HBox spacing="20">
-                            <Label text="De:"/>
-                            <TextField fx:id="from" promptText="Ingresa el correo de origen"/>
-                            <Label text="Asunto:"/>
-                            <TextField fx:id="subject" promptText="Ingresa el asunto!"/>
-                        </HBox>
-                    </top>
                     <center>
                         <VBox spacing="20">
                             <padding>
                                 <Insets right="10"/>
                             </padding>
+                            <HBox spacing="20">
+                                <Label text="De:"/>
+                                <TextField fx:id="from" promptText="Ingresa el correo de origen"/>
+                                <Label text="Asunto:"/>
+                                <TextField fx:id="subject" promptText="Ingresa el asunto!"/>
+                            </HBox>
                             <Label text="Escribe tu mensaje aqui!"/>
-                            <ToggleButton text="Alternar Texto plano/HTML" fx:id="toggleHtml">
-                            </ToggleButton>
-                            <TextArea fx:id="correo" visible="${!toggleHtml.selected}"
-                                      managed="${!toggleHtml.selected}"/>
-                            <HTMLEditor fx:id="correoHTML" visible="${toggleHtml.selected}"
-                                        managed="${toggleHtml.selected}"/>
+                            <HBox spacing="20">
+                                <Label text="Tipo MIME"/>
+                                <ComboBox fx:id="mimeType" promptText="Selecciona el tipo!" editable="true">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="text/plain; charset=UTF-8"/>
+                                            <String fx:value="text/html; charset=UTF-8"/>
+                                        </FXCollections>
+                                    </items>
+                                </ComboBox>
+                            </HBox>
+                            <TextArea fx:id="correo"/>
                             <Button text="Enviar correos masivos!" onAction="#sendMassive" fx:id="btnEnviar"/>
                         </VBox>
                     </center>
