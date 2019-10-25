@@ -62,21 +62,33 @@ public class Controller {
         this.stage = stage;
     }
 
+    private boolean isEverythingOkay() {
+        return !from.getText().isEmpty() &&
+                !subject.getText().isEmpty() &&
+                !correo.getText().isEmpty() &&
+                !smtpServer.getText().isEmpty() &&
+                !userName.getText().isEmpty() &&
+                !smtpPassword.getText().isEmpty() &&
+                data != null;
+    }
     public void sendMassive() {
-        MailerBuilder builder = new MailerBuilder();
-        Mailer m = builder.setEmailFrom(from.getText())
-                .setEmailSubject(subject.getText())
-                .setEmailText(correo.getText())
-                .setSmtpServer(smtpServer.getText())
-                .setUsername(userName.getText())
-                .setPassword(smtpPassword.getText())
-                .setEmails(data)
-                .createMailer();
-        if (m != null) {
+        if (isEverythingOkay()) {
+            MailerBuilder builder = new MailerBuilder();
+            Mailer m = builder.setEmailFrom(from.getText())
+                    .setEmailSubject(subject.getText())
+                    .setEmailText(correo.getText())
+                    .setSmtpServer(smtpServer.getText())
+                    .setUsername(userName.getText())
+                    .setPassword(smtpPassword.getText())
+                    .setEmails(data)
+                    .createMailer();
             Runnable r = m::sendMail;
             Thread t = new Thread(r);
             t.setDaemon(false);
             t.start();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Tienes que cargar el archivo antes de empezar el envio!");
+            alert.show();
         }
     }
 
